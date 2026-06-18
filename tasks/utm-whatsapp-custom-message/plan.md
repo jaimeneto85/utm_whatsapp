@@ -3,8 +3,8 @@
 ## 🎯 SCOPE
 
 ### Arquivos Afetados
-- [ ] `utm_whatsapp.js` (NOVO — raiz do projeto, JS de browser puro, sem build/npm)
-- [ ] `template.tpl` (MODIFICADO — novo param `CUSTOM_MESSAGE`, passa `msg` na URL injetada)
+- [x] `utm_whatsapp.js` (NOVO — raiz do projeto, JS de browser puro, sem build/npm)
+- [x] `template.tpl` (MODIFICADO — novo param `CUSTOM_MESSAGE`, passa `msg` na URL injetada)
 - [ ] `tests/` (NOVO — testes para funções puras do `utm_whatsapp.js`)
 
 ### Fora do Escopo
@@ -113,16 +113,16 @@ rewriteHref(href, msg, clientId) -> string
 ## 📝 TASKS
 
 ### Fase 1: Implementação do script de browser
-- [ ] T1.1: [LOW] Criar esqueleto IIFE de `utm_whatsapp.js` com `'use strict'`, try/catch global, guard de inicialização única (`window.__utmwa_initialized`) e `readParams` lendo de `currentScript.src` (resolvido/decodificado) com fallback `querySelectorAll('script[src*="utm_whatsapp.js"]')` pegando o ÚLTIMO; decode único do `msg`/`clientId`.
-- [ ] T1.2a: [MEDIUM] Funções puras `parseQuery` (manual, ES5-friendly, preserva duplicados) e `composeText` (idempotente, com fix do `msg` vazio e suffix por string match).
-- [ ] T1.2b: [MEDIUM] `rewriteHref` cobrindo as 5 formas de URL: (a) wa.me sem `?`, (b) wa.me com `text`, (c) web.whatsapp.com `send?phone=&text=`, (d) sem trailing `?` espúrio, (e) com fragmento `#` separado e re-anexado. Substitui apenas a ÚLTIMA ocorrência de `text`. encode via `encodeURIComponent`. Retorna href original em no-op/erro (com `console.warn` no path de erro).
-- [ ] T1.3: [LOW] `collectLinks` (`a[href*="wa.me"], a[href*="web.whatsapp.com"]`) + aplicação; marca `data-utmwa` ANTES de setar `href`; expõe funções puras via guard `typeof module !== 'undefined' && (module.exports = {...})` (NÃO poluir `window` em produção).
-- [ ] T1.4: [LOW] MutationObserver com `{ childList: true, subtree: true }` (SEM `attributes`), processando apenas `addedNodes` que sejam/contenham `<a>` whatsapp; guard de suporte (EC06); debounce ~100ms via `setTimeout`. Loop evitado pela marcação `data-utmwa` + observer não observar atributos.
+- [x] T1.1: [LOW] Criar esqueleto IIFE de `utm_whatsapp.js` com `'use strict'`, try/catch global, guard de inicialização única (`window.__utmwa_initialized`) e `readParams` lendo de `querySelectorAll('script[src*="utm_whatsapp.js"]')` pegando o ÚLTIMO (primary); fallback `currentScript.src`; decode único do `msg`/`clientId`.
+- [x] T1.2a: [MEDIUM] Funções puras `parseQuery` (manual, ES5-friendly, preserva duplicados, handle `+`→space) e `composeText` (idempotente, com fix do `msg` vazio e suffix por string match).
+- [x] T1.2b: [MEDIUM] `rewriteHref` cobrindo as 5 formas de URL: (a) wa.me sem `?`, (b) wa.me com `text`, (c) web.whatsapp.com `send?phone=&text=`, (d) sem trailing `?` espúrio, (e) com fragmento `#` separado e re-anexado. Substitui apenas a ÚLTIMA ocorrência de `text`. encode via `encodeURIComponent`. Retorna href original em no-op/erro (com `console.warn` no path de erro).
+- [x] T1.3: [LOW] `collectLinks` (`a[href*="wa.me"], a[href*="web.whatsapp.com"]`) + aplicação; marca `data-utmwa` ANTES de setar `href`; expõe funções puras via guard `typeof module !== 'undefined' && (module.exports = {...})` (NÃO poluir `window` em produção). `parseScriptSrc` também exportada para testabilidade de `readParams`.
+- [x] T1.4: [LOW] MutationObserver com `{ childList: true, subtree: true }` (SEM `attributes`), processando apenas `addedNodes` que sejam/contenham `<a>` whatsapp; guard de suporte (EC06); debounce ~100ms via `setTimeout`. MutationObserver escaneia sub-árvore do nó adicionado (não document inteiro).
 
 ### Fase 2: Atualização do template GTM
-- [ ] T2.1: [LOW] Adicionar campo `CUSTOM_MESSAGE` em `___TEMPLATE_PARAMETERS___`.
-- [ ] T2.2: [LOW] Atualizar `updateLinks` no sandbox para anexar `&msg=` com `encodeUriComponent`.
-- [ ] T2.3: [LOW] Validar/confirmar `___WEB_PERMISSIONS___` inalteradas e justificar (URL ainda em `/static/*`).
+- [x] T2.1: [LOW] Adicionar campo `CUSTOM_MESSAGE` em `___TEMPLATE_PARAMETERS___`.
+- [x] T2.2: [LOW] Atualizar `updateLinks` no sandbox para anexar `&msg=` com `encodeUriComponent`. Fix adicional: remover `()` de `gtmOnSuccess`/`gtmOnFailure` (eram chamados imediatamente em vez de passados como callbacks).
+- [x] T2.3: [LOW] Validar/confirmar `___WEB_PERMISSIONS___` inalteradas e justificar (URL ainda em `/static/*`).
 
 ### Fase 3: Testes
 - [ ] T3.1: [MEDIUM] Testes das funções puras (`composeText`, `rewriteHref`, `parseQuery`) cobrindo CA01–CA07 e EC03/EC04/EC05/EC07. Runner simples sem deps (node puro ou expor funções).

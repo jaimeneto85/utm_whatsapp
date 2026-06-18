@@ -35,6 +35,13 @@ ___TEMPLATE_PARAMETERS___
     "name": "GA_MEASUREMENT_ID",
     "displayName": "GA4 ID",
     "simpleValueType": true
+  },
+  {
+    "type": "TEXT",
+    "name": "CUSTOM_MESSAGE",
+    "displayName": "Mensagem personalizada (vai no começo)",
+    "simpleValueType": true,
+    "defaultValue": ""
   }
 ]
 
@@ -58,7 +65,7 @@ function getClientId(gaMeasurementId, callback, failureCallback) {
 
 // update the WhatsApp links on page
 function updateLinks(clientId, data) {
-  injectScript('https://singularidata.com/static/utm_whatsapp.js?clientId='+encodeUriComponent(clientId)+"&v="+encodeUriComponent(getTimestampMillis()), data.gtmOnSuccess(), data.gtmOnFailure());
+  injectScript('https://singularidata.com/static/utm_whatsapp.js?clientId='+encodeUriComponent(clientId)+"&v="+encodeUriComponent(getTimestampMillis())+'&msg='+encodeUriComponent(data.CUSTOM_MESSAGE || ''), data.gtmOnSuccess, data.gtmOnFailure);
 }
   
 // Verify if gtag.js is loaded before executing the function
@@ -248,5 +255,10 @@ scenarios: []
 ___NOTES___
 
 Created on 6/10/2024, 5:51:58 PM
+
+Known limitations:
+- Shadow DOM subtrees are not traversed by the MutationObserver or initial querySelectorAll.
+- Links wrapped in redirect proxies (e.g. l.facebook.com/l.php?u=) are not unwrapped.
+- CUSTOM_MESSAGE must be a literal text value; do not pre-encode it before passing to GTM.
 
 
