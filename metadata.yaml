@@ -1,5 +1,7 @@
 homepage: "https://singularidata.com"
 documentation: "https://singularidata.com/utm-whatsapp"
 versions:
+  - sha: d978c813607f2afb0d7f129848f7ed5eaa9ca8ab
+    changeNotes: feat - custom message field (prepended) + utm_whatsapp.js rewrites wa.me/web.whatsapp.com links
   - sha: 0cfa4ba69118fa8836a2b39b4d27c9a4a7461c9c
     changeNotes: fix - encodeUriComponent
