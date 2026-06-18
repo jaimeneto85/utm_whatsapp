@@ -34,7 +34,11 @@
         core = core.slice(0, core.length - suffix.length).replace(/\s+$/, '');
       }
       var middle = core;
-      if (msg !== '' && middle.slice(0, msg.length) === msg) {
+      if (
+        msg !== '' &&
+        middle.slice(0, msg.length) === msg &&
+        (middle.length === msg.length || middle.charAt(msg.length) === ' ')
+      ) {
         middle = middle.slice(msg.length).replace(/^\s+/, '');
       }
       return [msg, middle, suffix].filter(Boolean).join(' ').replace(/\s{2,}/g, ' ').trim();

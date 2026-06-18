@@ -21,7 +21,11 @@
 - Fragmento `#` corrompe parse manual de querystring → separar e re-anexar.
 
 ## Aprendizados de QA
-- (a preencher após primeiro ciclo de QA)
+- Projeto sem `package.json` → o "build gate" é o test runner: `node tests/utm_whatsapp.test.js` (zero deps). 44 testes passaram em 1 ciclo (APPROVED direto).
+- Bug pré-existente encontrado e corrigido: `injectScript(url, data.gtmOnSuccess(), data.gtmOnFailure())` invocava os callbacks na hora; o correto é passar as REFERÊNCIAS (`data.gtmOnSuccess, data.gtmOnFailure`). API: `injectScript(url, onSuccess, onFailure, cacheToken)`.
+- Strip de prefixo `msg` precisa de word-boundary: checar `middle.charAt(msg.length) === ' '` (ou fim da string) para não mutilar palavras quando `msg` é prefixo de caractere (ex.: msg="Oi" em "Oiça"). Era idempotente mesmo sem isso, mas corrigido.
+- `parseQuery` deve converter `+`→`%20` antes de `decodeURIComponent` (form-urlencoded).
+- `document.currentScript` é null para script injetado dinamicamente (injectScript) → querySelectorAll é o caminho primário, não fallback.
 
 ## Dependências & Integrações
 - GA4 via `gtag('get', measurementId, 'client_id', cb)` para obter `client_id`. Mantido inalterado.
