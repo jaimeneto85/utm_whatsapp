@@ -125,7 +125,7 @@ rewriteHref(href, msg, clientId) -> string
 - [x] T2.3: [LOW] Validar/confirmar `___WEB_PERMISSIONS___` inalteradas e justificar (URL ainda em `/static/*`).
 
 ### Fase 3: Testes
-- [ ] T3.1: [MEDIUM] Testes das funções puras (`composeText`, `rewriteHref`, `parseQuery`) cobrindo CA01–CA07 e EC03/EC04/EC05/EC07. Runner simples sem deps (node puro ou expor funções).
+- [x] T3.1: [MEDIUM] Testes das funções puras (`composeText`, `rewriteHref`, `parseQuery`) cobrindo CA01–CA07 e EC03/EC04/EC05/EC07. Runner simples sem deps (node puro ou expor funções).
 
 ## Análise Dual
 
